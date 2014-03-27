@@ -1,0 +1,112 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>@ViewBag.Title - @Html.LocalizationString("site_name")</title>
+    <link rel="shortcut icon" href="/_public/img/favicon.ico" />
+    <link rel="stylesheet" href="/_public/css/boot.css?v=1" />
+    <link rel="stylesheet" href="/_public/css/app.css?v=1" />
+</head>
+    <body>
+        <div id="main" class="container">
+            <div class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a class="navbar-brand" href="/">@Html.LocalizationString("site_name")</a>
+                </div>
+                <div class="navbar-collapse collapse navbar-responsive-collapse">
+                    <ul class="nav navbar-nav">
+
+                        @if (User.Identity.IsAuthenticated)
+                    {
+                        if (User.Identity.GetRoleName() == ConstHelper.Admin)
+                        {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@Html.LocalizationString("menu_administration") <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/admin/users">@Html.LocalizationString("menu_settings_users")</a></li>
+                                    <li><a href="/admin/feedbacks">@Html.LocalizationString("menu_settings_feed_backs")</a></li>
+                                    <li class="divider"></li>
+                                </ul>
+                            </li>
+                        }
+                    }
+
+                    </ul>
+                    <form class="navbar-form navbar-left"><input type="text" class="form-control col-lg-8" placeholder="@Html.LocalizationString("search")"></form>
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li style="margin-left: 5px; margin-top: -2px;"><a href="/lang/change/tr"><img src="/_Public/img/flag/tr.png" alt="Türkçe" /></a></li>
+                        <li style="margin-left: -10px; margin-right: -10px; margin-top: -2px;"><a href="/lang/change/en"><img src="/_Public/img/flag/en.png" alt="English" /></a></li>
+
+                        @if (User.Identity.IsAuthenticated)
+                    {
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <img src="@Url.Gravatar(User.Identity.GetEmail(), 25)" alt="@User.Identity.GetFullName()" class="img-circle" />
+                                    @User.Identity.GetFullName() <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/user/passwordreset">@Html.LocalizationString("menu_user_reset")</a></li>
+                                    <li><a href="/user/logout">@Html.LocalizationString("menu_user_logout")</a></li>
+                                </ul>
+                            </li>
+                    }
+                    else
+                    {
+                            <li><a href="/user/login">@Html.LocalizationString("menu_login")</a></li>
+                            <li><a href="/user/new">@Html.LocalizationString("menu_signup")</a></li>
+                    }
+
+                    </ul>
+                </div><!-- /.nav-collapse -->
+            </div>
+            <div style="padding: 3px;">
+                <div class="col-lg-12">
+                    @RenderBody()
+                </div>
+                <div class="clearfix"></div>
+                <footer style="padding: 3px;"><hr /><p>&copy; @DateTime.Now.Year</p></footer>
+            </div>
+
+        </div>
+
+        <div id="feedback"><button class="btn btn-success" id="btnOpenFeedBack" data-toggle="modal" data-target="#modalFeedback">@Html.LocalizationString("btn_open_feedback_popup")</button></div>
+        <div class="modal fade" id="modalFeedback">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">@Html.LocalizationString("feedback_popup_title")</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="wrnFeedback"></div>
+                        <form name="frmFeedback" id="frmFeedback">
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <div class="form-group">
+                                    <span>@Html.LocalizationString("email")</span>
+                                    <input id="FeedbackEmail" name="FeedbackEmail" type="email" class="form-control" />
+                                </div>
+                            }
+                            <div class="form-group">
+                                <span>@Html.LocalizationString("feedback")</span>
+                                <textarea id="Feedback" name="Feedback" class="form-control"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnCancelFeedback" name="btnCancelFeedback" class="btn btn-danger" data-dismiss="modal">@Html.LocalizationString("btn_cancel")</button>
+                        <button id="btnSaveFeedback" name="btnSaveFeedback" class="btn btn-success">@Html.LocalizationString("btn_save")</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+        <script src="/_public/js/app.js?v=1"></script>
+        @RenderSection("Script", false)
+    </body>
+</html>

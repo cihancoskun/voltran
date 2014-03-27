@@ -1,0 +1,21 @@
+﻿@model  List<DistrictModel>
+
+@{
+    ViewBag.Title = Html.LocalizationString("district_view_title");
+}
+
+<div class="col-lg-12">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+
+    @foreach (var item in Model.ToList())
+    {
+        <div class="col-lg-12">
+            <a href="/district/boxes/@item.Id" class="col-lg-3">
+                <h2>
+                    <span class="col-lg-4">@item.Name</span>
+                </h2>
+            </a>
+        </div>
+    } 
+</div>

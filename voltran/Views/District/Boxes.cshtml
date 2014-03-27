@@ -1,0 +1,39 @@
+﻿@model List<BoxModel>
+
+@{
+    ViewBag.Title = Html.LocalizationString("company_view_title");
+}
+
+<div class="col-lg-12">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+
+    <div class="col-lg-12">
+
+        @for (int i = 0; i < 10; i++)
+        {
+            <div class="col-lg-10">
+
+                @for (int j = 1; j < 11; j++)
+                {
+                    var company = Model.ToList().FirstOrDefault(x => x.BoxNumber == i * 10 + j);
+                    if (company != null)
+                    {
+                        <h2>
+                            <a href="/company/page/@company.Id" class="col-lg-1">
+                                <span>@Html.Raw(i * 10 + j)</span>
+                            </a>
+
+                        </h2>
+                    }
+                    else
+                    {
+                        <h2>
+                            <span class="col-lg-1">@Html.Raw(i * 10 + j)</span>
+                        </h2>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>

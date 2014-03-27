@@ -1,0 +1,59 @@
+﻿@model LoginModel
+
+@{
+    ViewBag.Title = Html.LocalizationString("login_view_title");
+}
+
+<div class="col-lg-5">
+    <h3>@ViewBag.Title</h3>
+    <hr />
+
+    <form id="frm" name="frm" action="/user/login?ReturnUrl=@Request.QueryString["ReturnUrl"]" method="post">
+        @Html.Partial("_Msg")
+
+        <div class="col-lg-12">
+            <span>@Html.LocalizationString("email")</span>
+            <input type="text" class="form-control input-lg" id="email" name="email" value="@Model.Email" />
+        </div>
+
+        <div class="col-lg-12">
+            <span>@Html.LocalizationString("password")</span>
+            <input type="password" class="form-control input-lg" name="password" id="password" value="@Model.Password" />
+        </div>
+
+        @Html.AntiForgeryToken()
+
+        <div class="col-lg-12">
+            <input type="submit" value="@Html.LocalizationString("btn_login")" class="btn btn-primary btn-lg" />
+            <a href="/user/passwordreset" style="margin-left: 10px;"></a>
+        </div>
+
+    </form>
+</div>
+
+@section script
+{
+    <script>
+        $(function () {
+            $("form#frm").validate({
+                rules: {
+                    password: {
+                        required: true,
+                        minlength: 4
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    }
+                },
+                messages: {
+                    password: {
+                        required: "*",
+                        minlength: "*"
+                    },
+                    email: "*"
+                }
+            });
+        });
+    </script>
+}

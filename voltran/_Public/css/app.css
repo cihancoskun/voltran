@@ -1,0 +1,32 @@
+﻿.error {
+    color: red;
+    padding: 5px;
+}
+
+#feedback {
+    position: fixed;
+    top: 35%;
+    right: 0;
+    height: 0;
+    text-align: right;
+    z-index: 9999;
+    margin-right: -85px;
+}
+
+    #feedback button {
+        transform: rotate(-90deg);
+        -webkit-transform: rotate(-90deg);
+        -moz-transform: rotate(-90deg);
+        -o-transform: rotate(-90deg);
+        filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+        display: block;
+    }
+
+#frm input {
+    margin: 5px;
+}
+
+.nav li a {
+    padding-left:10px;
+    padding-right:10px;
+}
