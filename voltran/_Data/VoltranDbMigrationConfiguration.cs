@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Net.Mime;
-using System.Web.Mvc;
 
 using Voltran.Web.Helpers;
 using Voltran.Web.Data.Entities;
@@ -51,7 +49,7 @@ namespace Voltran.Web.Services.Data
 
             #region Districts
 
-            if (!context.Districts.Any())
+            if (context.Districts.Count() < 2)
             {
                 AddDistrict(context, "34", "Ümraniye");
                 AddDistrict(context, "34", "Şişli");
@@ -66,7 +64,7 @@ namespace Voltran.Web.Services.Data
 
             #region Companies
 
-            if (!context.Companies.Any())
+            if (context.Companies.Count() < 2)
             {
                 AddParentCompany(context, "Burger King");
 
