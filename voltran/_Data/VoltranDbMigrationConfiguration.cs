@@ -49,7 +49,7 @@ namespace Voltran.Web.Services.Data
 
             #region Districts
 
-            if (context.Districts.Count() < 2)
+            if (context.Districts.Count() < 4)
             {
                 AddDistrict(context, "34", "Ümraniye");
                 AddDistrict(context, "34", "Şişli");
@@ -64,7 +64,7 @@ namespace Voltran.Web.Services.Data
 
             #region Companies
 
-            if (context.Companies.Count() < 2)
+            if (context.Companies.Count() < 4)
             {
                 AddParentCompany(context, "Burger King");
 
