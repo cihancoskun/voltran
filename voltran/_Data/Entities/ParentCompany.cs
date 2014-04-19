@@ -9,6 +9,5 @@ namespace Voltran.Web.Data.Entities
         public string Address { get; set; }
           
         public virtual ICollection<Company> Companies { get; set; }  
-
     }
 }

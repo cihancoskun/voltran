@@ -139,6 +139,7 @@
     <Compile Include="Models\DistrictModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="_Configurations\FilterConfig.cs" />
     <Compile Include="_Configurations\IocConfig.cs" />
@@ -159,6 +160,8 @@
     <Compile Include="_Data\Entities\ParentCompany.cs" />
     <Compile Include="_Data\Entities\ImagesFromUser.cs" />
     <Compile Include="_Data\Entities\ImagesOfCompany.cs" />
+    <Compile Include="_Data\Entities\Question.cs" />
+    <Compile Include="_Data\Entities\QuestionSet.cs" />
     <Compile Include="_Data\Entities\User.cs" />
     <Compile Include="_Data\Services\CityService.cs" />
     <Compile Include="_Data\Services\CompanyService.cs" />

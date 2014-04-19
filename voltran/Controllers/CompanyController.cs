@@ -45,11 +45,9 @@ namespace Voltran.Web.Controllers
 
             if (!long.TryParse(id, out companyId)) return RedirectToHome();
 
-            var companyEntity = await _companyService.GetCompany(companyId);
+            var companyEntity = await _companyService.GetCompany(companyId); 
 
-            var imageEntity = await _imageService.GetImagesOfCompany(companyId);
-
-            var model = CompanyPageModel.Map(companyEntity, imageEntity);
+            var model = CompanyPageModel.Map(companyEntity);
 
             return View(model);
         }

@@ -11,24 +11,26 @@ namespace Voltran.Web.Models
         public CompanyModel Company { get; set; }
         public List<ImageModel> Images { get; set; }
 
-        public static CompanyPageModel Map(Company company, List<ImagesOfCompany> imageOfCompany)
+        public static CompanyPageModel Map(Company company)
         {
             var model = new CompanyPageModel
             {
-                Company = new CompanyModel { Id = company.Id,
-                                             Name = company.Name, 
-                                             LogoUrl = company.LogoUrl, 
-                                             Address = company.Address }
+                Company = new CompanyModel
+                {
+                    Id = company.Id,
+                    Name = company.Name,
+                    LogoUrl = company.LogoUrl,
+                    Address = company.Address
+                },
+                Images = new List<ImageModel>()
             };
 
-            model.Images = new List<ImageModel>();
+            if (!company.ImagesOfCompany.Any()) return model;
 
-            if (imageOfCompany.Count() > 0)
-            {
-                var imageModel = imageOfCompany.Select(ImageModel.Map);
+            var imageModel = company.ImagesOfCompany.Where(x => !x.IsDeleted 
+                                                                 && x.IsActive).Select(ImageModel.Map);
 
-                model.Images.AddRange(imageModel.ToList());
-            }
+            model.Images.AddRange(imageModel.ToList());
             return model;
         }
     }

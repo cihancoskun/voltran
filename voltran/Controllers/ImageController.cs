@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -52,13 +53,13 @@ namespace Voltran.Web.Controllers
 
         [HttpPost]
         public ActionResult UploadImages(string id, HttpPostedFileBase[] uploadImages)
-        {
-            id = "1";
+        { 
+            id = "1";           // Id kontrolü koyulacak. test amaçlı şimdilik companyId = 1 olan firmanın fotoları atılacak.
             long companyId;
 
             if (!long.TryParse(id, out companyId)) return RedirectToHome();
 
-            if (uploadImages.Count() < 1)
+            if (!uploadImages.Any())
             {
                 return RedirectToHome();
             }

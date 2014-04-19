@@ -31,6 +31,7 @@ namespace Voltran.Web.Services.Data
 
             if (!context.ParentCompanies.Any())
             {
+                AddParentCompany(context, "Burger King");
                 AddParentCompany(context, "_Others");
             }
 
@@ -40,9 +41,9 @@ namespace Voltran.Web.Services.Data
 
             if (!context.Cities.Any())
             {
-                AddCity(context, "34", "İstanbul", "Kadıköy", "Cinemaximum", "Tepe Nautilus 3.Kat", "Cinemaximum",1);
-                AddCity(context, "35", "İzmir", "Göztepe", "Cinemaximum", "Göztepe'de bir yer", "Cinemaximum",1);
-                AddCity(context, "06", "Ankara", "Kızılay", "Cinemaximum", "Kızılay'da bir yer", "Cinemaximum",1);
+                AddCity(context, "34", "İstanbul", "Kadıköy", "Cinemaximum", "Tepe Nautilus 3.Kat", "Cinemaximum", 1);
+                AddCity(context, "35", "İzmir", "Göztepe", "Cinemaximum", "Göztepe'de bir yer", "Cinemaximum", 1);
+                AddCity(context, "06", "Ankara", "Kızılay", "Cinemaximum", "Kızılay'da bir yer", "Cinemaximum", 1);
             }
 
             #endregion
@@ -66,8 +67,6 @@ namespace Voltran.Web.Services.Data
 
             if (context.Companies.Count() < 4)
             {
-                AddParentCompany(context, "Burger King");
-
                 AddCompany(context, "34", "Kadıköy", "Burger King", "Burger King", 2);
                 AddCompany(context, "34", "Kadıköy", "Burger King", "Burger King", 3);
                 AddCompany(context, "34", "Ümraniye", "Burger King", "Burger King", 5);
@@ -76,6 +75,19 @@ namespace Voltran.Web.Services.Data
                 AddCompany(context, "06", "Kızılay", "Burger King", "Burger King", 24);
 
                 AddCompanyWithoutParent(context, 1, "Lal bar", 33);
+            }
+
+            #endregion
+
+            #region Questions
+
+            if (!context.Questions.Any())
+            {
+                var questionSetId = AddQuestionSet(context, "CinemaximumSoruSet1");
+
+                AddQuestion(context, "Cinemaximum kaç senesinde kurulmuştur ?", "1985", "1990", "1995", "2000", "2000", questionSetId, 1);
+                AddQuestion(context, "Cinemaximum kaç tane salona sahiptir ?", "10", "50", "150", "200", "150",questionSetId, 1);
+                AddQuestion(context, "Cinemaximum'da şimdiye kadar kaç sinema gösterildi ?", "500", "750", "1000", "2000", "750",questionSetId, 1);  
             }
 
             #endregion
@@ -506,8 +518,6 @@ namespace Voltran.Web.Services.Data
 
         private void AddCity(VoltranDbContext context, string licensePlate, string name, string districtName, string companyName, string companyAddress, string parentCompanyName, int boxNumber)
         {
-            long parentCompanyId;
-
             if (parentCompanyName == "")
             {
                 parentCompanyName = "_Others";
@@ -517,19 +527,18 @@ namespace Voltran.Web.Services.Data
 
             if (parentCompany == null)
             {
-                parentCompanyId = AddParentCompany(context, parentCompanyName, "", "");
-            }
-            else
-            {
-                parentCompanyId = parentCompany.Id;
+                var parentCompanyId = AddParentCompany(context, parentCompanyName, "", "");
+                parentCompany = context.ParentCompanies.FirstOrDefault(x => x.Id == parentCompanyId);
             }
 
-            var city = new City
+            if (parentCompany != null)
             {
-                LicensePlate = licensePlate,
-                Name = name,
-                IsActive = true,
-                Districts = new List<District>
+                var city = new City
+                {
+                    LicensePlate = licensePlate,
+                    Name = name,
+                    IsActive = true,
+                    Districts = new List<District>
                     {
                         new District
                         {
@@ -543,7 +552,8 @@ namespace Voltran.Web.Services.Data
                                     Name = companyName,
                                     Address = companyAddress,
                                     BoxNumber = boxNumber,
-                                    ParentCompanyId = parentCompanyId,
+                                    ParentCompanyId = parentCompany.Id,
+                                    ParentCompanyName = parentCompany.Name,
                                     CityLicensePlate = licensePlate,
                                     DistrictName = districtName,
                                     IsActive = true
@@ -551,9 +561,10 @@ namespace Voltran.Web.Services.Data
                             }
                         }
                     }
-            };
+                };
 
-            context.Cities.Add(city);
+                context.Cities.Add(city);
+            }
 
             context.SaveChanges();
         }
@@ -645,6 +656,43 @@ namespace Voltran.Web.Services.Data
             context.SaveChanges();
         }
 
+        private long AddQuestionSet(VoltranDbContext context, string name)
+        {
+            var questionSet = new QuestionSet
+            {
+                Name = name,
+                IsActive = true 
+            };
 
+            context.QuestionSets.Add(questionSet);
+
+            context.SaveChanges();
+
+            return questionSet.Id;
+        }
+
+        private void AddQuestion(VoltranDbContext context, string questionText, string answer1, string answer2, string answer3, string answer4, string rightAnswer,long questionSetId, long companyId)
+        {
+            var company = context.Companies.FirstOrDefault(x => x.Id == companyId);
+
+            if (company == null) return;
+             
+            var question = new Question
+            {
+                QuestionText = questionText,
+                Answer1 = answer1,
+                Answer2 = answer2,
+                Answer3 = answer3,
+                Answer4 = answer4,
+                RightAnswer = rightAnswer,
+                QuestionSetId = questionSetId,
+                CompanyId = companyId,
+                IsActive = true
+            };
+
+            context.Questions.Add(question);
+
+            context.SaveChanges();
+        }
     }
 }

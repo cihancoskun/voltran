@@ -17,7 +17,7 @@ namespace Voltran.Web.Data.Entities
         public long DistrictId { get; set; }
         public District District { get; set; }
 
-        public long ParentCompanyId { get; set; }
+        public long? ParentCompanyId { get; set; }
         public ParentCompany ParentCompany { get; set; }
 
         public virtual ICollection<ImagesOfCompany> ImagesOfCompany { get; set; }  
