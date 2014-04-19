@@ -2,6 +2,7 @@ namespace Voltran.Web.Data.Entities
 {
     public class Question : BaseEntity
     {
+        public int QuestionNo { get; set; }
         public string QuestionText { get; set; }
         public string Answer1 { get; set; }
         public string Answer2 { get; set; }

@@ -12,16 +12,19 @@ namespace Voltran.Web.Controllers
         private readonly IFeedbackService _feedbackService;
         private readonly ICompanyService _companyService;
         private readonly IImageService _imageService;
+        private readonly IQuestionService _questionService;
 
 
         public CompanyController(
             IFeedbackService feedbackService,
             ICompanyService companyService,
-            IImageService imageService)
+            IImageService imageService,
+             IQuestionService questionService)
         {
             _feedbackService = feedbackService;
             _companyService = companyService;
             _imageService = imageService;
+            _questionService = questionService;
         }
 
         [HttpGet]
@@ -45,11 +48,27 @@ namespace Voltran.Web.Controllers
 
             if (!long.TryParse(id, out companyId)) return RedirectToHome();
 
-            var companyEntity = await _companyService.GetCompany(companyId); 
+            var companyEntity = await _companyService.GetCompany(companyId);
 
             var model = CompanyPageModel.Map(companyEntity);
 
             return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<JsonResult> IsAnswerCorrect(long questionId, string answer)
+        {
+            var result = new ResponseModel { Ok = false };
+
+            var isOk = await _questionService.IsAnswerCorrect(questionId,answer);
+            if (!isOk) return Json(result, JsonRequestBehavior.DenyGet);
+
+            var nextQuestion = await _questionService.GetNextQuestion(questionId);
+
+            result.Ok = true;
+            result.Result = nextQuestion;
+
+            return Json(result, JsonRequestBehavior.DenyGet);
         }
     }
 }

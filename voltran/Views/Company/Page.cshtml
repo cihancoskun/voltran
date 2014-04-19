@@ -30,7 +30,9 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane fade in active" id="current_opportunities"> Buraya Sorular gelicek.</div>
+            <div class="tab-pane fade in active" id="current_opportunities"> Buraya Sorular gelicek.
+                
+            </div>
             <div class="tab-pane fade" id="past_opportunities"> Buraya Geçmiş fırsatlar (tarih aralıklarıyla) listelenecek.</div>
             <div class="tab-pane fade" id="about_us">Hakkımızda sayfası</div>
             <div class="tab-pane fade" id="contact">
@@ -44,3 +46,51 @@
     </div>
 
 </div>
+
+
+@*@section script
+{
+    <script>
+        $(function () { 
+             
+            $("input#btnNewToken").click(function () {
+                var appId = $(this).data("id");
+                $("input#btnDelete").data("id", appId);
+
+                $.ajax({
+                    url: "/app/newtoken",
+                    type: "POST",
+                    data: "appId=" + appId + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
+                }).done(function (r) {
+                    if (r) {
+                        var row = $("<tr />"); 
+
+                        var tdDeleteButton = $("<td />");
+                        tdDeleteButton.append(aDeleteButton);
+                        row.append(tdDeleteButton);
+
+                        var tdToken = $("<td />");
+                        tdToken.html(r.Result.Token);
+                        row.append(tdToken);
+                        var tdCreationDateStr = $("<td />");
+                        tdCreationDateStr.html(r.Result.CreationDateStr);
+                        row.append(tdCreationDateStr);
+
+                        var tdUsageCount = $("<td />");
+                        tdUsageCount.html(r.Result.UsageCount);
+                        row.append(tdUsageCount);
+
+                        $('table tbody').append(row);
+
+
+                    } else {
+                        //warning
+                    }
+                });
+            });
+
+
+
+        });
+    </script>
+}*@

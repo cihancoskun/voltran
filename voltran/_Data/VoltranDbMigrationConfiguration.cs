@@ -85,9 +85,9 @@ namespace Voltran.Web.Services.Data
             {
                 var questionSetId = AddQuestionSet(context, "CinemaximumSoruSet1");
 
-                AddQuestion(context, "Cinemaximum kaç senesinde kurulmuştur ?", "1985", "1990", "1995", "2000", "2000", questionSetId, 1);
-                AddQuestion(context, "Cinemaximum kaç tane salona sahiptir ?", "10", "50", "150", "200", "150",questionSetId, 1);
-                AddQuestion(context, "Cinemaximum'da şimdiye kadar kaç sinema gösterildi ?", "500", "750", "1000", "2000", "750",questionSetId, 1);  
+                AddQuestion(context, 1, "Cinemaximum kaç senesinde kurulmuştur ?", "1985", "1990", "1995", "2000", "2000", questionSetId, 1);
+                AddQuestion(context, 2, "Cinemaximum kaç tane salona sahiptir ?", "10", "50", "150", "200", "150", questionSetId, 1);
+                AddQuestion(context, 3, "Cinemaximum'da şimdiye kadar kaç sinema gösterildi ?", "500", "750", "1000", "2000", "750", questionSetId, 1);
             }
 
             #endregion
@@ -661,7 +661,7 @@ namespace Voltran.Web.Services.Data
             var questionSet = new QuestionSet
             {
                 Name = name,
-                IsActive = true 
+                IsActive = true
             };
 
             context.QuestionSets.Add(questionSet);
@@ -671,14 +671,15 @@ namespace Voltran.Web.Services.Data
             return questionSet.Id;
         }
 
-        private void AddQuestion(VoltranDbContext context, string questionText, string answer1, string answer2, string answer3, string answer4, string rightAnswer,long questionSetId, long companyId)
+        private void AddQuestion(VoltranDbContext context, int questionNo, string questionText, string answer1, string answer2, string answer3, string answer4, string rightAnswer, long questionSetId, long companyId)
         {
             var company = context.Companies.FirstOrDefault(x => x.Id == companyId);
 
             if (company == null) return;
-             
+
             var question = new Question
             {
+                QuestionNo = questionNo,
                 QuestionText = questionText,
                 Answer1 = answer1,
                 Answer2 = answer2,

@@ -61,6 +61,7 @@ namespace Voltran.Web.Configurations
                 Component.For<IDistrictService>().ImplementedBy<DistrictService>().LifestylePerWebRequest(),
                 Component.For<ICompanyService>().ImplementedBy<CompanyService>().LifestylePerWebRequest(),
                 Component.For<IImageService>().ImplementedBy<ImageService>().LifestylePerWebRequest(),
+                Component.For<IQuestionService>().ImplementedBy<QuestionService>().LifestylePerWebRequest(),
                 Component.For<IFeedbackService>().ImplementedBy<FeedbackService>().LifestylePerWebRequest()
                 );
 

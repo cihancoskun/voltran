@@ -169,6 +169,7 @@
     <Compile Include="_Data\Services\FeedbackService.cs" />
     <Compile Include="_Data\Services\AuthService.cs" />
     <Compile Include="_Data\Services\ImageService.cs" />
+    <Compile Include="_Data\Services\QuestionService.cs" />
     <Compile Include="_Data\Services\UserService.cs" />
     <Compile Include="_Helpers\ConstHelper.cs" />
     <Compile Include="_Helpers\IdentityHelper.cs" />
