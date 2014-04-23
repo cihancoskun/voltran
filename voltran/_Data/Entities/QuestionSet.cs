@@ -6,6 +6,9 @@ namespace Voltran.Web.Data.Entities
     {
         public string Name { get; set; }
 
+        public long CompanyId { get; set; }
+        public Company Company { get; set; }
+
         public virtual ICollection<Question> Questions { get; set; }  
     }
 }

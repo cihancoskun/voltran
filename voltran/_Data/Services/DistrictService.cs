@@ -13,7 +13,7 @@ namespace Voltran.Web.Services
             if (cityId < 1) return null;
 
             var query = Context.Districts.Where(x => !x.IsDeleted
-                                                        && x.CityId == cityId
+                                                        && x.CityId == cityId 
                                                         && x.IsActive);
 
             var result = query.OrderBy(x => x.Id).ToList();

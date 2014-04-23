@@ -83,7 +83,7 @@ namespace Voltran.Web.Services.Data
 
             if (!context.Questions.Any())
             {
-                var questionSetId = AddQuestionSet(context, "CinemaximumSoruSet1");
+                var questionSetId = AddQuestionSet(context, "CinemaximumSoruSet1",1);
 
                 AddQuestion(context, 1, "Cinemaximum kaç senesinde kurulmuştur ?", "1985", "1990", "1995", "2000", "2000", questionSetId, 1);
                 AddQuestion(context, 2, "Cinemaximum kaç tane salona sahiptir ?", "10", "50", "150", "200", "150", questionSetId, 1);
@@ -656,11 +656,12 @@ namespace Voltran.Web.Services.Data
             context.SaveChanges();
         }
 
-        private long AddQuestionSet(VoltranDbContext context, string name)
+        private long AddQuestionSet(VoltranDbContext context, string name, long companyId)
         {
             var questionSet = new QuestionSet
             {
                 Name = name,
+                CompanyId = companyId,
                 IsActive = true
             };
 

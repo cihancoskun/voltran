@@ -9,19 +9,15 @@ namespace Voltran.Web.Models
     public class CompanyPageModel : BaseModel
     {
         public CompanyModel Company { get; set; }
+        public QuestionModel Question { get; set; }       
         public List<ImageModel> Images { get; set; }
 
-        public static CompanyPageModel Map(Company company)
+        public static CompanyPageModel Map(Company company, Question question)
         {
             var model = new CompanyPageModel
             {
-                Company = new CompanyModel
-                {
-                    Id = company.Id,
-                    Name = company.Name,
-                    LogoUrl = company.LogoUrl,
-                    Address = company.Address
-                },
+                Company = CompanyModel.Map(company),
+                Question= QuestionModel.Map(question),
                 Images = new List<ImageModel>()
             };
 
@@ -31,6 +27,7 @@ namespace Voltran.Web.Models
                                                                  && x.IsActive).Select(ImageModel.Map);
 
             model.Images.AddRange(imageModel.ToList());
+              
             return model;
         }
     }

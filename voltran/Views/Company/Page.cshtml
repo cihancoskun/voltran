@@ -30,7 +30,39 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div class="tab-pane fade in active" id="current_opportunities"> Buraya Sorular gelicek.
+            <div class="tab-pane fade in active" id="current_opportunities">
+                
+                <table  class="table table-bordered table-hover">
+                    <thead id="tHead">
+                        <tr id="trQuestion"> 
+                            <td colspan="4">@Model.Question.QuestionText</td> 
+                        </tr>
+                    </thead> 
+                    <tbody id="tBody">
+                        <tr>
+                            <td>
+                                <input type="radio" id="rbAnswer1" name="rbAnswer">@Model.Question.Answer1</input>
+                            </td>
+                            <td>
+                                <input type="radio" id="rbAnswer2" name="rbAnswer">@Model.Question.Answer2</input>
+                            </td>
+                            <td>
+                                <input type="radio" id="rbAnswer3" name="rbAnswer">@Model.Question.Answer3</input>
+                            </td>
+                            <td>
+                                <input type="radio" id="rbAnswer4" name="rbAnswer">@Model.Question.Answer4</input>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                                <input type="button" id="btnNextQuestion" class="btn btn-sm btn-info pull-right" value="@Html.LocalizationString("btn_next_question")" data-id="@Model.Question.Id" />
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
                 
             </div>
             <div class="tab-pane fade" id="past_opportunities"> Buraya Geçmiş fırsatlar (tarih aralıklarıyla) listelenecek.</div>
@@ -46,45 +78,42 @@
     </div>
 
 </div>
+@Html.AntiForgeryToken()
 
-
-@*@section script
+@section script
 {
     <script>
-        $(function () { 
-             
-            $("input#btnNewToken").click(function () {
-                var appId = $(this).data("id");
-                $("input#btnDelete").data("id", appId);
+        $(function () {
+            alert("test"); 
+
+            $("input#btnNextQuestion").click(function () {
+                var questionId = $(this).data("id");
+
+                alert("test2");
+
 
                 $.ajax({
-                    url: "/app/newtoken",
+                    url: "/company/isanswercorrect",
                     type: "POST",
-                    data: "appId=" + appId + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
+                    data: "questionId=" + questionId + "&answer='asdqwe'" + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
                 }).done(function (r) {
                     if (r) {
+                        alert("test3");
+
+                       // $("#trQuestion").delete();
+
                         var row = $("<tr />"); 
 
-                        var tdDeleteButton = $("<td />");
-                        tdDeleteButton.append(aDeleteButton);
-                        row.append(tdDeleteButton);
+                        var td = $("<td />");
+                        td.html(r.Result.QuestionText);
 
-                        var tdToken = $("<td />");
-                        tdToken.html(r.Result.Token);
-                        row.append(tdToken);
-                        var tdCreationDateStr = $("<td />");
-                        tdCreationDateStr.html(r.Result.CreationDateStr);
-                        row.append(tdCreationDateStr);
-
-                        var tdUsageCount = $("<td />");
-                        tdUsageCount.html(r.Result.UsageCount);
-                        row.append(tdUsageCount);
-
-                        $('table tbody').append(row);
+                        row.append(td); 
+                          
+                        $('#tHead').append(row);
 
 
                     } else {
-                        //warning
+                        alert("test4");
                     }
                 });
             });
@@ -93,4 +122,4 @@
 
         });
     </script>
-}*@
+}

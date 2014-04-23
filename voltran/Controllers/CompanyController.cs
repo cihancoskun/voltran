@@ -28,12 +28,12 @@ namespace Voltran.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Detail(string id)
+        public async Task<ActionResult> Detail(long id)
         {
-            long companyId;
+            if (id < 1) return RedirectToHome();
 
-            if (!long.TryParse(id, out companyId)) return RedirectToHome();
-
+            var companyId = id;
+              
             var entity = await _companyService.GetCompany(companyId);
 
             var model = CompanyModel.Map(entity);
@@ -42,20 +42,36 @@ namespace Voltran.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Page(string id)
+        public async Task<ActionResult> Page(long id)
         {
-            long companyId;
+            if (id < 1) return RedirectToHome();
 
-            if (!long.TryParse(id, out companyId)) return RedirectToHome();
-
+            var companyId = id;
+              
             var companyEntity = await _companyService.GetCompany(companyId);
 
-            var model = CompanyPageModel.Map(companyEntity);
+            var questionEntity = await _questionService.GetFirstQuestion(companyId);
+
+            var model = CompanyPageModel.Map(companyEntity, questionEntity);
 
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        //[HttpGet]
+        //public async Task<ActionResult> GetFirstQuestion(long id)
+        //{
+        //    if (id < 1) return RedirectToHome();
+
+        //    var companyId = id;
+
+        //    var companyEntity = await _companyService.GetCompany(companyId);
+
+        //    var model = CompanyPageModel.Map(companyEntity);
+
+        //    return View(model);
+        //}
+
+        [HttpPost, ValidateAntiForgeryToken] 
         public async Task<JsonResult> IsAnswerCorrect(long questionId, string answer)
         {
             var result = new ResponseModel { Ok = false };

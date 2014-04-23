@@ -139,6 +139,7 @@
     <Compile Include="Models\DistrictModel.cs" />
     <Compile Include="Models\ImageModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\QuestionModel.cs" />
     <Compile Include="Models\ResponseModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="_Configurations\FilterConfig.cs" />
