@@ -74,14 +74,14 @@ namespace Voltran.Web.Controllers
         [HttpPost, ValidateAntiForgeryToken] 
         public async Task<JsonResult> IsAnswerCorrect(long questionId, string answer)
         {
-            var result = new ResponseModel { Ok = false };
+            var result = new ResponseModel { IsOk = false };
 
             var isOk = await _questionService.IsAnswerCorrect(questionId,answer);
             if (!isOk) return Json(result, JsonRequestBehavior.DenyGet);
 
             var nextQuestion = await _questionService.GetNextQuestion(questionId);
 
-            result.Ok = true;
+            result.IsOk = true;
             result.Result = nextQuestion;
 
             return Json(result, JsonRequestBehavior.DenyGet);

@@ -2,7 +2,7 @@
 {
     public class ResponseModel : BaseModel
     {
-        public bool Ok { get; set; }
+        public bool IsOk { get; set; }
         public object Result { get; set; }
     }
 }

@@ -31,39 +31,35 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="current_opportunities">
-                
-                <table  class="table table-bordered table-hover">
-                    <thead id="tHead">
-                        <tr id="trQuestion"> 
-                            <td colspan="4">@Model.Question.QuestionText</td> 
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr id="trQuestion">
+                            <td>
+                                <h3 style="font-family: 'Trebuchet MS'">
+                                    <span class="label">@Model.Question.QuestionText</span> 
+                                </h3>
+                            </td>
                         </tr>
-                    </thead> 
-                    <tbody id="tBody">
-                        <tr>
-                            <td>
-                                <input type="radio" id="rbAnswer1" name="rbAnswer">@Model.Question.Answer1</input>
-                            </td>
-                            <td>
-                                <input type="radio" id="rbAnswer2" name="rbAnswer">@Model.Question.Answer2</input>
-                            </td>
-                            <td>
-                                <input type="radio" id="rbAnswer3" name="rbAnswer">@Model.Question.Answer3</input>
-                            </td>
-                            <td>
-                                <input type="radio" id="rbAnswer4" name="rbAnswer">@Model.Question.Answer4</input>
+                    </thead>
+                    <tbody>
+                        <tr id="trAnswers">
+                            <td class="btn-group-vertical" style="width:99%">
+                                <button name="rbAnswer" type="button" style="text-align:left" class="btn btn-primary">@Model.Question.Answer1</button>
+                                <button name="rbAnswer" type="button" style="text-align:left" class="btn btn-primary">@Model.Question.Answer2</button>
+                                <button name="rbAnswer" type="button" style="text-align:left" class="btn btn-primary">@Model.Question.Answer3</button>
+                                <button name="rbAnswer" type="button" style="text-align:left" class="btn btn-primary">@Model.Question.Answer4</button>
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td colspan="4">
+                            <td>
                                 <input type="button" id="btnNextQuestion" class="btn btn-sm btn-info pull-right" value="@Html.LocalizationString("btn_next_question")" data-id="@Model.Question.Id" />
                             </td>
                         </tr>
                     </tfoot>
                 </table>
-
-                
             </div>
             <div class="tab-pane fade" id="past_opportunities"> Buraya Geçmiş fırsatlar (tarih aralıklarıyla) listelenecek.</div>
             <div class="tab-pane fade" id="about_us">Hakkımızda sayfası</div>
@@ -84,42 +80,50 @@
 {
     <script>
         $(function () {
-            alert("test"); 
+            var btnNextQuestion = $("input#btnNextQuestion");
+            var answer = "";
 
-            $("input#btnNextQuestion").click(function () {
+            var shuffle = function (arr) {
+                for (var j, x, i = arr.length; i; j = parseInt(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
+                return arr;
+            }
+
+            $("[name='rbAnswer']").click(function () {
+                answer = $(this).text();
+            });
+              
+            btnNextQuestion.click(function () {
                 var questionId = $(this).data("id");
-
-                alert("test2");
-
-
+                    
                 $.ajax({
                     url: "/company/isanswercorrect",
                     type: "POST",
-                    data: "questionId=" + questionId + "&answer='asdqwe'" + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
+                    data: "questionId=" + questionId + "&answer=" + answer + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
                 }).done(function (r) {
-                    if (r) {
-                        alert("test3");
-
-                       // $("#trQuestion").delete();
-
-                        var row = $("<tr />"); 
-
-                        var td = $("<td />");
-                        td.html(r.Result.QuestionText);
-
-                        row.append(td); 
+                    if (r && r.IsOk) {
                           
-                        $('#tHead').append(row);
+                        $("#trQuestion").find("span.label").html(r.Result.QuestionText);
+                          
+                        var answers = [r.Result.Answer1, r.Result.Answer2, r.Result.Answer3, r.Result.Answer4];
 
+                        answers = shuffle(answers);
+                        
+                        var i = 0;
 
+                        $("#trAnswers").find("button[name='rbAnswer']").each(function () {
+                            $(this).html(answers[i]);
+                            i++;
+                        });
+
+                        btnNextQuestion.data("id", r.Result.Id);
+                         
                     } else {
-                        alert("test4");
+                        alert("Yanlış Cevap");
+                        location.reload();
                     }
-                });
+                }).fail(function () { alert("Beklenmedik bir hata oluştu.") });
             });
-
-
-
+             
         });
     </script>
 }

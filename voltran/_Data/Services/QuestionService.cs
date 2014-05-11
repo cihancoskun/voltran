@@ -8,7 +8,14 @@ namespace Voltran.Web.Services
     {
         public Task<bool> IsAnswerCorrect(long questionId, string answer)
         {
-            return Task.FromResult(true); ;
+            if (questionId < 1) return Task.FromResult(false); ;
+
+            var query = Context.Questions.Where(x => x.Id == questionId
+                                                    && x.RightAnswer == answer);
+
+            var result = query.Any();
+
+            return Task.FromResult(result);
         }
 
         public Task<Question> GetFirstQuestion(long companyId)
@@ -16,17 +23,17 @@ namespace Voltran.Web.Services
             if (companyId < 1) return null;
 
             var queryQuestionSet = Context.QuestionSets.Where(x => !x.IsDeleted
-                                                        && x.CompanyId == companyId
-                                                        && x.IsActive);
+                                                                && x.CompanyId == companyId
+                                                                && x.IsActive);
               
             var questionSet = queryQuestionSet.FirstOrDefault();
 
             if (questionSet == null) return null;
 
             var queryQuestion = Context.Questions.Where(x => !x.IsDeleted
-                                                 && x.QuestionSetId == questionSet.Id
-                                                 && x.QuestionNo == 1
-                                                 && x.IsActive);
+                                                         && x.QuestionSetId == questionSet.Id
+                                                         && x.QuestionNo == 1
+                                                         && x.IsActive);
 
             var firstQuestion = queryQuestion.FirstOrDefault();
 
