@@ -94,11 +94,15 @@
               
             btnNextQuestion.click(function () {
                 var questionId = $(this).data("id");
-                    
+                
                 $.ajax({
                     url: "/company/isanswercorrect",
                     type: "POST",
-                    data: "questionId=" + questionId + "&answer=" + answer + "&__RequestVerificationToken=" + $('input[name="__RequestVerificationToken"]').val(),
+                    data: {
+                        questionId: questionId, 
+                        answer: answer, 
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    }
                 }).done(function (r) {
                     if (r && r.IsOk) {
                           
@@ -110,9 +114,8 @@
                         
                         var i = 0;
 
-                        $("#trAnswers").find("button[name='rbAnswer']").each(function () {
-                            $(this).html(answers[i]);
-                            i++;
+                        $("#trAnswers").find("button[name='rbAnswer']").each(function (i, answerButton) {
+                            answerButton.html(answers[i]);
                         });
 
                         btnNextQuestion.data("id", r.Result.Id);
