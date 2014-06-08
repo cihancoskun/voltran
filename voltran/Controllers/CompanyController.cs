@@ -42,7 +42,7 @@ namespace Voltran.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Page(long id)
+        public async Task<ActionResult> Page(long id = 0)
         {
             if (id < 1) return RedirectToHome();
 
@@ -56,20 +56,6 @@ namespace Voltran.Web.Controllers
 
             return View(model);
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult> GetFirstQuestion(long id)
-        //{
-        //    if (id < 1) return RedirectToHome();
-
-        //    var companyId = id;
-
-        //    var companyEntity = await _companyService.GetCompany(companyId);
-
-        //    var model = CompanyPageModel.Map(companyEntity);
-
-        //    return View(model);
-        //}
 
         [HttpPost, ValidateAntiForgeryToken] 
         public async Task<JsonResult> IsAnswerCorrect(long questionId, string answer)
